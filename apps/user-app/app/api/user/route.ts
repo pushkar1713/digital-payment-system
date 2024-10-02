@@ -7,7 +7,7 @@ export const GET = async () => {
   await client.user.create({
     data: {
       username: "asd",
-      number: 345456576,
+      email: "345456576",
       password: "asdmsdnfs",
     },
   });
