@@ -73,9 +73,9 @@ export const NEXT_AUTH: AuthOptions = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET || " ",
-  // pages: {
-  //   signIn: "/signin",
-  // },
+  pages: {
+    signIn: "/signin",
+  },
   callbacks: {
     jwt: async ({ user, token }: any) => {
       if (user) {
@@ -84,7 +84,9 @@ export const NEXT_AUTH: AuthOptions = {
       return token;
     },
     async session({ session, token }: any) {
-      session.user.id = token.sub;
+      if (session && session.user) {
+        session.user.id = token.sub;
+      }
       return session;
     },
   },

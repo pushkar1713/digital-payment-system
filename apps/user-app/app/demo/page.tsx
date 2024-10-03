@@ -1,16 +1,30 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const session = useSession();
-  // In a real application, you would fetch this data from an API or database
+  const router = useRouter();
   const user = {
-    id: "12345",
-    username: session.data?.user?.name || "",
-    email: session.data?.user?.email,
+    id: session.data?.user?.id || "not logged in",
+    username: session?.data?.user?.name || "not logged in",
+    email: session?.data?.user?.email || "not logged in",
     avatarUrl: "https://pbs.twimg.com/media/F16AF4wWYAwhwVC.jpg",
+  };
+
+  const handleLogout = () => {
+    signOut();
+    router.push("/signin");
   };
 
   return (
@@ -32,6 +46,17 @@ export default function Component() {
             <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button
+            variant="outline"
+            onClick={handleLogout}
+            className="w-full"
+            aria-label="Logout"
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Logout
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );

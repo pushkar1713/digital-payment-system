@@ -15,8 +15,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon, Router } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/compat/router";
-import { signin } from "../../lib/actions/signin";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -28,7 +27,15 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // setError("");
-    signin({ email, password });
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (!res?.error) {
+      router.push("/demo");
+    }
     // if (!email || !password) {
     //   setError("Please fill in all fields");
     //   return;

@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@repo/db/client";
+import { getServerSession } from "next-auth";
+import { NEXT_AUTH } from "../../../lib/auth";
 
-const client = new PrismaClient();
+const getSession = async () => {
+  const session = await getServerSession(NEXT_AUTH);
 
-export const GET = async () => {
-  await client.user.create({
-    data: {
-      username: "asd",
-      email: "345456576",
-      password: "asdmsdnfs",
-    },
-  });
   return NextResponse.json({
-    message: "hi there",
+    session,
   });
 };
+
+export { getSession as GET };

@@ -24,7 +24,7 @@ export async function signin(params: userType) {
     redirect: false,
   });
 
-  if (res?.ok) {
+  if (!res?.error) {
     redirect("/demo");
   }
 
