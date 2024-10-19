@@ -1,10 +1,8 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthOptions } from "next-auth";
-import { PrismaClient } from "@repo/db/client";
+import db from "@repo/db/client";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-
-const client = new PrismaClient();
 
 const signinSchema = z.object({
   email: z.string().email(),
@@ -36,7 +34,7 @@ export const NEXT_AUTH: AuthOptions = {
           console.log("zod error");
           return null;
         }
-        const user = await client.user.findUnique({
+        const user = await db.user.findUnique({
           where: {
             email: credentials.email,
           },

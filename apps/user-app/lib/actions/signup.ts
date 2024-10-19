@@ -1,5 +1,5 @@
 "use server";
-import { PrismaClient } from "@repo/db/client";
+import db from "@repo/db/client";
 import bycrypt from "bcryptjs";
 import { z } from "zod";
 
@@ -10,8 +10,6 @@ const User = z.object({
 });
 
 type userType = z.infer<typeof User>;
-
-const client = new PrismaClient();
 
 export async function signup(params: userType) {
   const validated_data = User.safeParse(params);
@@ -24,7 +22,7 @@ export async function signup(params: userType) {
 
   try {
     const hashedPassword = await bycrypt.hash(params.password, 10);
-    await client.user.create({
+    await db.user.create({
       data: {
         email: params.email,
         username: params.username,
